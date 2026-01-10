@@ -4,12 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // Connection URLs are no longer supported in the schema file.
-  // Move database connection configuration to prisma.config.ts and
-  // pass the adapter (for a direct DB) or accelerateUrl (for Accelerate)
-  // when constructing PrismaClient as documented:
-  // https://pris.ly/d/config-datasource
-  // https://pris.ly/d/prisma7-client-config
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
