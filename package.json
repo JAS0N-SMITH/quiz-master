@@ -1,0 +1,17 @@
+{
+  "name": "quiz-master",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Root config for repo-wide tooling",
+  "scripts": {
+    "prepare": "husky install",
+    "lint:all": "./scripts/lint-all.sh"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.9"
+  },
+  "lint-staged": {
+    "**/*": "./scripts/lint-all.sh"
+  }
+}
