@@ -5,11 +5,13 @@
   "description": "Root config for repo-wide tooling",
   "scripts": {
     "prepare": "husky install",
-    "lint:all": "./scripts/lint-all.sh"
+    "lint:all": "./scripts/lint-all.sh",
+    "lint:root": "eslint . --fix"
   },
   "devDependencies": {
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.9"
+    "lint-staged": "^15.2.9",
+    "eslint": "^9.13.0"
   },
   "lint-staged": {
     "**/*": "./scripts/lint-all.sh"

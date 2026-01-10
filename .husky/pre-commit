@@ -1,3 +1,6 @@
 #!/bin/sh
 # Husky v10-compatible pre-commit hook
+echo "Pre-commit: root lint"
+npm run lint:root || true
+echo "Pre-commit: project lint + format"
 ./scripts/lint-all.sh

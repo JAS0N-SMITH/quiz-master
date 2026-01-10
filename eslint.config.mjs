@@ -27,4 +27,13 @@ export default [
       ...eslint.configs.recommended.rules,
     },
   },
+  // Frontend: general browser globals and module source type
+  {
+    files: ['quizmaster-ui/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: { ...globals.browser },
+      sourceType: 'module',
+    },
+    rules: {},
+  },
 ];
