@@ -1,2 +1,25 @@
 emergency_prep_plan.md
 .DS_Store
+
+# Node/NestJS
+node_modules/
+dist/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Prisma generated artifacts
+quizmaster-api/generated/
+
+# VS Code
+.vscode/
