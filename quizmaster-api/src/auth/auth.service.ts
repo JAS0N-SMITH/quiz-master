@@ -15,9 +15,7 @@ export class AuthService {
   async login(email: string, password: string) {
     // TODO: Implement real login logic
     const payload = { sub: 'placeholder', email, role: 'STUDENT' };
-    const accessToken = await this.jwt.signAsync(payload, {
-      expiresIn: process.env.JWT_EXPIRATION || '7d',
-    });
+    const accessToken = await this.jwt.signAsync(payload);
     return { accessToken };
   }
 }

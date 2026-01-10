@@ -7,7 +7,14 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, ConfigModule, JwtModule.register({})],
+  imports: [
+    PrismaModule,
+    ConfigModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'dev-secret',
+      signOptions: { expiresIn: (process.env.JWT_EXPIRATION as any) || '7d' },
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })
