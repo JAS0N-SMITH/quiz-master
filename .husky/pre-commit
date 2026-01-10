@@ -1,5 +1,3 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Run repo-wide lint and format
+# Husky v10-compatible pre-commit hook
 ./scripts/lint-all.sh
