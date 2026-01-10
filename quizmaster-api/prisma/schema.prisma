@@ -1,15 +1,109 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // Connection URLs are no longer supported in the schema file.
+  // Move database connection configuration to prisma.config.ts and
+  // pass the adapter (for a direct DB) or accelerateUrl (for Accelerate)
+  // when constructing PrismaClient as documented:
+  // https://pris.ly/d/config-datasource
+  // https://pris.ly/d/prisma7-client-config
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // hashed with bcrypt
+  name      String
+  role      UserRole @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quizzes     Quiz[]
+  submissions Submission[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Quiz {
+  id          String    @id @default(uuid())
+  title       String    @db.VarChar(200)
+  description String?   @db.Text
+  teacherId   String
+  timeLimit   Int       // minutes
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  teacher     User         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  questions   Question[]
+  submissions Submission[]
+
+  @@index([teacherId])
+  @@index([published])
+  @@map("quizzes")
+}
+
+model Question {
+  id            String    @id @default(uuid())
+  quizId        String
+  text          String    @db.Text
+  options       Json      // ["Option A", "Option B", "Option C", "Option D"]
+  correctOption Int       // 0-3
+  explanation   String?   @db.Text
+  order         Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers Answer[]
+
+  @@index([quizId])
+  @@map("questions")
+}
+
+model Submission {
+  id             String    @id @default(uuid())
+  userId         String
+  quizId         String
+  score          Int       @default(0)
+  totalQuestions Int
+  startedAt      DateTime  @default(now())
+  submittedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz    Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers Answer[]
+
+  @@index([userId])
+  @@index([quizId])
+  @@map("submissions")
+}
+
+model Answer {
+  id             String   @id @default(uuid())
+  submissionId   String
+  questionId     String
+  selectedOption Int
+  isCorrect      Boolean
+  createdAt      DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, questionId])
+  @@index([submissionId])
+  @@map("answers")
 }
