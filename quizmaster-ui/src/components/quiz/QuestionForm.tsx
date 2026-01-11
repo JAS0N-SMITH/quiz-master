@@ -1,14 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trash2, AlertCircle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -18,6 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+import { AlertCircle, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 interface QuestionFormProps {
   index: number;
@@ -37,7 +37,7 @@ export function QuestionForm({ index, onRemove }: QuestionFormProps) {
     name: `questions.${index}.options`,
   });
 
-  const questionErrors = errors.questions?.[index];
+  const questionErrors = (errors.questions as any)?.[index];
 
   return (
     <Card>
