@@ -1,4 +1,15 @@
-import { IsString, IsOptional, IsInt, IsBoolean, IsArray, ValidateNested, MinLength, MaxLength, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsInt,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+  MinLength,
+  MaxLength,
+  Min,
+  Max,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateQuestionDto } from './create-question.dto';
 

@@ -21,13 +21,7 @@ export class QuizzesService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(filters: QuizFilters = {}) {
-    const {
-      published,
-      teacherId,
-      search,
-      page = 1,
-      limit = 10,
-    } = filters;
+    const { published, teacherId, search, page = 1, limit = 10 } = filters;
 
     const skip = (page - 1) * limit;
     const where: any = {

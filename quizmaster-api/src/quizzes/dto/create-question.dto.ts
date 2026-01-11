@@ -1,4 +1,14 @@
-import { IsString, IsArray, IsInt, IsOptional, MinLength, ArrayMinSize, ArrayMaxSize, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsArray,
+  IsInt,
+  IsOptional,
+  MinLength,
+  ArrayMinSize,
+  ArrayMaxSize,
+  Min,
+  Max,
+} from 'class-validator';
 
 export class CreateQuestionDto {
   @IsString()
