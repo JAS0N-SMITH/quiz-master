@@ -138,7 +138,12 @@ export class SubmissionsService {
     // Calculate score and create answers
     return this.prisma.$transaction(async (tx) => {
       let score = 0;
-      const answersToCreate = [];
+      const answersToCreate: Array<{
+        submissionId: string;
+        questionId: string;
+        selectedOption: number;
+        isCorrect: boolean;
+      }> = [];
 
       for (const answerDto of dto.answers) {
         const question = submission.quiz.questions.find(

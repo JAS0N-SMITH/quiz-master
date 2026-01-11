@@ -6,12 +6,25 @@
   "scripts": {
     "prepare": "husky install",
     "lint:all": "./scripts/lint-all.sh",
-    "lint:root": "eslint . --fix"
+    "lint:root": "eslint . --fix",
+    "setup": "./scripts/setup.sh",
+    "install:all": "npm install && cd quizmaster-api && npm install && cd ../quizmaster-ui && npm install",
+    "db:generate": "cd quizmaster-api && npx prisma generate",
+    "db:migrate": "cd quizmaster-api && npx prisma migrate dev",
+    "db:setup": "npm run db:generate && npm run db:migrate",
+    "dev:api": "cd quizmaster-api && npm run start:dev",
+    "dev:ui": "cd quizmaster-ui && npm run dev",
+    "dev": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"npm run dev:api\" \"npm run dev:ui\"",
+    "build:api": "cd quizmaster-api && npm run build",
+    "build:ui": "cd quizmaster-ui && npm run build",
+    "build": "npm run build:api && npm run build:ui",
+    "start": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"cd quizmaster-api && npm run start:prod\" \"cd quizmaster-ui && npm run start\""
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
+    "eslint": "^9.13.0",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.9",
-    "eslint": "^9.13.0"
+    "lint-staged": "^15.2.9"
   },
   "lint-staged": {
     "**/*": "./scripts/lint-all.sh"
