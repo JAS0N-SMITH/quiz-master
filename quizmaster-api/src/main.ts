@@ -7,7 +7,7 @@ import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Security headers
   app.use(
     helmet({
@@ -22,7 +22,7 @@ async function bootstrap() {
       crossOriginEmbedderPolicy: false,
     }),
   );
-  
+
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new LoggingInterceptor());
   // TODO: Add TransformInterceptor for response format standardization

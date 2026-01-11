@@ -15,7 +15,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: (config: ConfigService): JwtModuleOptions => {
         const secret = config.get<string>('JWT_SECRET');
         const isProduction = config.get<string>('NODE_ENV') === 'production';
-        
+
         if (!secret) {
           if (isProduction) {
             throw new Error(
@@ -34,7 +34,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
             'WARNING: Using default JWT secret "dev-secret". Set JWT_SECRET in production.',
           );
         }
-        
+
         const expiration = config.get<string>('JWT_EXPIRATION', '7d');
         return {
           secret: secret || 'dev-secret-do-not-use-in-production',
