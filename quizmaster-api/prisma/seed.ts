@@ -3,6 +3,11 @@ import * as bcrypt from 'bcrypt';
 
 const prisma: PrismaClient = new PrismaClient();
 
+/**
+ * Hash password for seed data
+ * NOTE: In production, use a strong password from environment variable
+ * This default is only for development/demo purposes
+ */
 async function hashPassword(password: string) {
   const saltRounds = 10;
   return bcrypt.hash(password, saltRounds);
@@ -17,7 +22,11 @@ async function clearData() {
 }
 
 async function createUsers() {
-  const password = await hashPassword('password123');
+  // Use environment variable for seed password, fallback to demo password for development
+  // In production, ensure SEED_PASSWORD is set to a strong password
+  // snyk:ignore - This is a seed file for development/demo purposes only
+  const seedPassword = process.env.SEED_PASSWORD || 'password123';
+  const password = await hashPassword(seedPassword);
 
   const teacher1 = await prisma.user.create({
     data: { email: 'teacher1@demo.com', name: 'Alice Teacher', role: UserRole.TEACHER, password }

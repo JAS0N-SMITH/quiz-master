@@ -10,9 +10,11 @@ import { useAuthStore } from '@/store/authStore';
 
 interface QuizCardProps {
   quiz: Quiz;
+  onDelete?: (quizId: string) => void;
+  showDelete?: boolean;
 }
 
-export function QuizCard({ quiz }: QuizCardProps) {
+export function QuizCard({ quiz, onDelete, showDelete = false }: QuizCardProps) {
   const { user } = useAuthStore();
   const isTeacher = user?.role === 'TEACHER' || user?.role === 'ADMIN';
   const isOwner = quiz.teacherId === user?.id;
@@ -71,6 +73,18 @@ export function QuizCard({ quiz }: QuizCardProps) {
                 Results
               </Button>
             </Link>
+            {showDelete && onDelete && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onDelete(quiz.id);
+                }}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         ) : quiz.published ? (
           <Link href={`/dashboard/quizzes/${quiz.id}/take`} className="w-full">
