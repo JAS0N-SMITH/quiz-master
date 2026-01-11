@@ -1,1 +1,1 @@
-// Placeholder for Users DTOs
+export { UpdateUserDto } from './update-user.dto';
