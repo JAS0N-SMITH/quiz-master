@@ -38,6 +38,23 @@ api.interceptors.response.use(
   }
 );
 
+// TODO: Response Format Unwrapping (Production Implementation)
+// When backend implements TransformInterceptor (see quizmaster-api/src/common/interceptors/transform.interceptor.ts),
+// all responses will be wrapped in { data: {...} } format.
+// Update this interceptor to unwrap the response:
+// api.interceptors.response.use(
+//   (response: AxiosResponse) => {
+//     // Unwrap the data envelope if present
+//     if (response.data && typeof response.data === 'object' && 'data' in response.data) {
+//       response.data = response.data.data;
+//     }
+//     return response;
+//   },
+//   (error: AxiosError) => {
+//     // ... existing error handling
+//   }
+// );
+
 // Typed API methods
 export const apiClient = {
   get: <T = any>(url: string, config?: any): Promise<T> => {

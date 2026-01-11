@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Query,
@@ -69,7 +69,7 @@ export class QuizzesController {
     return this.quizzesService.create(createQuizDto, user.id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(RolesGuard)
   @Roles('TEACHER', 'ADMIN')
   update(

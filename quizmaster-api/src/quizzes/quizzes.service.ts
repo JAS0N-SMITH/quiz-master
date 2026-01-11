@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -180,8 +181,8 @@ export class QuizzesService {
     }
 
     if (quiz._count.submissions > 0) {
-      throw new BadRequestException(
-        'Cannot update quiz that has submissions. Create a new quiz instead.',
+      throw new ConflictException(
+        'Cannot modify a quiz that has existing submissions. Create a new quiz instead.',
       );
     }
 
