@@ -1,12 +1,96 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+  ParseIntPipe,
+  DefaultValuePipe,
+  ParseBoolPipe,
+} from '@nestjs/common';
 import { QuizzesService } from './quizzes.service';
+import { CreateQuizDto } from './dto/create-quiz.dto';
+import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { SubmissionsService } from '../submissions/submissions.service';
 
 @Controller('quizzes')
+@UseGuards(JwtAuthGuard)
 export class QuizzesController {
-  constructor(private readonly quizzesService: QuizzesService) {}
+  constructor(
+    private readonly quizzesService: QuizzesService,
+    private readonly submissionsService: SubmissionsService,
+  ) {}
 
   @Get()
-  findAll() {
-    return this.quizzesService.findAll();
+  findAll(
+    @Query('published') published?: string,
+    @Query('teacherId') teacherId?: string,
+    @Query('search') search?: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+  ) {
+    const filters: any = {
+      page,
+      limit,
+    };
+
+    if (published !== undefined) {
+      filters.published = published === 'true';
+    }
+
+    if (teacherId) {
+      filters.teacherId = teacherId;
+    }
+
+    if (search) {
+      filters.search = search;
+    }
+
+    return this.quizzesService.findAll(filters);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.quizzesService.findOne(id);
+  }
+
+  @Post()
+  @UseGuards(RolesGuard)
+  @Roles('TEACHER', 'ADMIN')
+  create(@Body() createQuizDto: CreateQuizDto, @CurrentUser() user: any) {
+    return this.quizzesService.create(createQuizDto, user.id);
+  }
+
+  @Patch(':id')
+  @UseGuards(RolesGuard)
+  @Roles('TEACHER', 'ADMIN')
+  update(
+    @Param('id') id: string,
+    @Body() updateQuizDto: UpdateQuizDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.quizzesService.update(id, updateQuizDto, user.id);
+  }
+
+  @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles('TEACHER', 'ADMIN')
+  remove(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.quizzesService.remove(id, user.id);
+  }
+
+  @Get(':id/submissions')
+  @UseGuards(RolesGuard)
+  @Roles('TEACHER', 'ADMIN')
+  findQuizSubmissions(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.submissionsService.findQuizSubmissions(id, user.id);
   }
 }
