@@ -82,7 +82,9 @@ describe('HttpExceptionFilter', () => {
 
       const callArgs = mockResponse.json.mock.calls[0][0];
       expect(callArgs.timestamp).toBeDefined();
-      expect(new Date(callArgs.timestamp).toISOString()).toBe(callArgs.timestamp);
+      expect(new Date(callArgs.timestamp).toISOString()).toBe(
+        callArgs.timestamp,
+      );
     });
 
     it('should include request path in response', () => {
