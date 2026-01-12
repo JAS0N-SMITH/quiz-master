@@ -46,13 +46,11 @@ describe('Auth (e2e)', () => {
 
     it('should reject duplicate email', async () => {
       // First registration
-      await request(app.getHttpServer())
-        .post('/auth/register')
-        .send({
-          email: 'e2e-test-duplicate@example.com',
-          password: 'password123',
-          name: 'First User',
-        });
+      await request(app.getHttpServer()).post('/auth/register').send({
+        email: 'e2e-test-duplicate@example.com',
+        password: 'password123',
+        name: 'First User',
+      });
 
       // Duplicate attempt
       await request(app.getHttpServer())
@@ -76,13 +74,11 @@ describe('Auth (e2e)', () => {
   describe('POST /auth/login', () => {
     beforeEach(async () => {
       // Create a test user
-      await request(app.getHttpServer())
-        .post('/auth/register')
-        .send({
-          email: 'e2e-test-login@example.com',
-          password: 'password123',
-          name: 'Login Test User',
-        });
+      await request(app.getHttpServer()).post('/auth/register').send({
+        email: 'e2e-test-login@example.com',
+        password: 'password123',
+        name: 'Login Test User',
+      });
     });
 
     it('should login with valid credentials', async () => {
@@ -143,9 +139,7 @@ describe('Auth (e2e)', () => {
     });
 
     it('should reject request without token', async () => {
-      await request(app.getHttpServer())
-        .get('/auth/me')
-        .expect(401);
+      await request(app.getHttpServer()).get('/auth/me').expect(401);
     });
 
     it('should reject invalid token', async () => {

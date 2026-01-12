@@ -68,9 +68,7 @@ describe('Quizzes (e2e)', () => {
     });
 
     it('should require authentication', async () => {
-      await request(app.getHttpServer())
-        .get('/quizzes')
-        .expect(401);
+      await request(app.getHttpServer()).get('/quizzes').expect(401);
     });
   });
 
@@ -167,9 +165,7 @@ describe('Quizzes (e2e)', () => {
     });
 
     it('should require authentication', async () => {
-      await request(app.getHttpServer())
-        .get(`/quizzes/${quizId}`)
-        .expect(401);
+      await request(app.getHttpServer()).get(`/quizzes/${quizId}`).expect(401);
     });
   });
 
@@ -194,7 +190,7 @@ describe('Quizzes (e2e)', () => {
             },
           ],
         });
-      
+
       if (response.status !== 201) {
         console.error('Quiz creation failed:', response.status, response.body);
       }
@@ -271,7 +267,7 @@ describe('Quizzes (e2e)', () => {
             },
           ],
         });
-      
+
       if (response.status !== 201) {
         console.error('Quiz creation failed:', response.status, response.body);
       }
