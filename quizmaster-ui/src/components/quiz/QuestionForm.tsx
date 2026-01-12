@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -136,7 +136,7 @@ export function QuestionForm({ index, onRemove }: QuestionFormProps) {
             rules={{ required: 'Please select the correct answer' }}
             render={({ field }) => (
               <RadioGroup
-                value={field.value?.toString()}
+                value={field.value !== undefined && field.value !== null ? field.value.toString() : ''}
                 onValueChange={(value) => field.onChange(parseInt(value))}
               >
                 <div className="grid grid-cols-2 gap-2">
