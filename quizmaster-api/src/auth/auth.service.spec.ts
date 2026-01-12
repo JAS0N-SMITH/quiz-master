@@ -29,7 +29,7 @@ describe('AuthService', () => {
         {
           provide: JwtService,
           useValue: {
-            sign: jest.fn().mockReturnValue('mock-jwt-token'),
+            signAsync: jest.fn().mockResolvedValue('mock-jwt-token'),
           },
         },
       ],
