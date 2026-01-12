@@ -18,7 +18,19 @@
     "build:api": "cd quizmaster-api && npm run build",
     "build:ui": "cd quizmaster-ui && npm run build",
     "build": "npm run build:api && npm run build:ui",
-    "start": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"cd quizmaster-api && npm run start:prod\" \"cd quizmaster-ui && npm run start\""
+    "start": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"cd quizmaster-api && npm run start:prod\" \"cd quizmaster-ui && npm run start\"",
+    "test:api": "cd quizmaster-api && npm test",
+    "test:api:watch": "cd quizmaster-api && npm run test:watch",
+    "test:api:cov": "cd quizmaster-api && npm run test:cov",
+    "test:api:e2e": "cd quizmaster-api && npm run test:e2e",
+    "test:ui": "cd quizmaster-ui && npm test",
+    "test:ui:watch": "cd quizmaster-ui && npm run test:watch",
+    "test:ui:coverage": "cd quizmaster-ui && npm run test:coverage",
+    "test:unit": "npm run test:api && npm run test:ui",
+    "test:all": "npm run test:api && npm run test:ui && npm run test:api:e2e",
+    "test:watch": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"npm run test:api:watch\" \"npm run test:ui:watch\"",
+    "test:coverage": "npm run test:api:cov && npm run test:ui:coverage",
+    "test": "npm run test:unit"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
