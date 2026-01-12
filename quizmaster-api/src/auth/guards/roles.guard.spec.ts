@@ -62,7 +62,9 @@ describe('RolesGuard', () => {
     });
 
     it('should return true when user role matches one of multiple allowed roles', () => {
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(['TEACHER', 'ADMIN']);
+      jest
+        .spyOn(reflector, 'getAllAndOverride')
+        .mockReturnValue(['TEACHER', 'ADMIN']);
 
       const context = createMockExecutionContext('TEACHER');
       const result = guard.canActivate(context);

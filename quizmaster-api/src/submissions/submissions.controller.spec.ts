@@ -51,7 +51,10 @@ describe('SubmissionsController', () => {
       const result = await controller.start(startDto, mockUser);
 
       expect(result).toEqual(submission);
-      expect(submissionsService.start).toHaveBeenCalledWith('quiz-id', mockUser.id);
+      expect(submissionsService.start).toHaveBeenCalledWith(
+        'quiz-id',
+        mockUser.id,
+      );
     });
   });
 
@@ -73,7 +76,11 @@ describe('SubmissionsController', () => {
 
       mockSubmissionsService.submit.mockResolvedValue(result);
 
-      const response = await controller.submit('submission-id', submitDto, mockUser);
+      const response = await controller.submit(
+        'submission-id',
+        submitDto,
+        mockUser,
+      );
 
       expect(response).toEqual(result);
       expect(submissionsService.submit).toHaveBeenCalledWith(
@@ -91,7 +98,9 @@ describe('SubmissionsController', () => {
         meta: { total: 1, page: 1, limit: 10, totalPages: 1 },
       };
 
-      mockSubmissionsService.findUserSubmissions.mockResolvedValue(expectedResult);
+      mockSubmissionsService.findUserSubmissions.mockResolvedValue(
+        expectedResult,
+      );
 
       const result = await controller.findUserSubmissions(mockUser, 1, 10);
 

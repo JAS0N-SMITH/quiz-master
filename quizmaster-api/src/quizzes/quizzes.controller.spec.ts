@@ -54,7 +54,13 @@ describe('QuizzesController', () => {
 
       mockQuizzesService.findAll.mockResolvedValue(expectedResult);
 
-      const result = await controller.findAll(undefined, undefined, undefined, 1, 10);
+      const result = await controller.findAll(
+        undefined,
+        undefined,
+        undefined,
+        1,
+        10,
+      );
 
       expect(result).toEqual(expectedResult);
       expect(quizzesService.findAll).toHaveBeenCalledWith({
@@ -132,7 +138,10 @@ describe('QuizzesController', () => {
       const result = await controller.create(createDto, mockUser);
 
       expect(result).toEqual(createdQuiz);
-      expect(quizzesService.create).toHaveBeenCalledWith(createDto, mockUser.id);
+      expect(quizzesService.create).toHaveBeenCalledWith(
+        createDto,
+        mockUser.id,
+      );
     });
   });
 
@@ -163,7 +172,10 @@ describe('QuizzesController', () => {
 
       const result = await controller.remove('quiz-id', mockUser);
 
-      expect(quizzesService.remove).toHaveBeenCalledWith('quiz-id', mockUser.id);
+      expect(quizzesService.remove).toHaveBeenCalledWith(
+        'quiz-id',
+        mockUser.id,
+      );
       expect(result.deletedAt).toBeDefined();
     });
   });
