@@ -52,10 +52,74 @@ $ npm run test
 
 # e2e tests
 $ npm run test:e2e
+# Testing Notes
+
+- In `NODE_ENV=test`, the global throttling guard is disabled to prevent `429 Too Many Requests` during e2e runs.
+- Use the root scripts for convenience:
+  - `npm run test:api` (unit)
+  - `npm run test:api:e2e` (ensure DB + migrations + e2e)
+  - `npm run test:api:e2e:detect` (e2e with Jest `--detectOpenHandles`).
+
 
 # test coverage
 $ npm run test:cov
 ```
+
+## Local Database & E2E
+
+This project uses Prisma 7 with the pg driver adapter. End-to-end tests and local runs need a Postgres instance and `DATABASE_URL`.
+
+### Start Postgres via Docker Compose (recommended)
+
+From the repo root where `docker-compose.yml` lives:
+
+```bash
+# bring up Postgres (detached)
+npm run compose:up
+
+# check status
+npm run compose:ps
+```
+
+### Prepare DB and run e2e tests
+
+```bash
+cd quizmaster-api
+
+# Apply migrations to the local DB
+npx prisma migrate deploy
+
+# Run e2e tests (Jest will default DATABASE_URL to local if unset)
+npm run test:e2e
+```
+
+To stop and remove the container and volume:
+
+```bash
+npm run compose:down
+```
+
+### DB Ensure (Monorepo Convenience)
+
+From the repo root, you can use a convenience script that detects a local Postgres on `localhost:5432` and skips Docker Compose when one is already running. Otherwise, it will start the `postgres` service and wait for it to become healthy:
+
+```bash
+npm run db:ensure
+```
+
+Additional helpers from the root:
+
+```bash
+npm run compose:up     # start the compose 'postgres' service
+npm run compose:ps     # check compose service status
+npm run compose:down   # stop and remove the compose service & volume
+```
+
+### Node & Prisma
+
+- Node: 20.19.x LTS or newer (see engines in package.json)
+- Prisma: v7.x — connection string is read via `prisma.config.ts` and environment
+- Runtime: `PrismaClient` is constructed with the pg adapter and uses `DATABASE_URL`
 
 ## Deployment
 
@@ -77,6 +141,13 @@ With Mau, you can deploy your application in just a few clicks, allowing you to 
 - `GET /health/live` — Liveness signal (minimal OK payload; no dependency checks).
 
 These endpoints are unauthenticated and intended for platform probes.
+
+### Quizzes Routes
+
+- `POST /quizzes` — Create quiz (Teacher/Admin)
+- `PUT /quizzes/:id` — Update quiz (Owner/Admin)
+- `PATCH /quizzes/:id` — Partial update (Owner/Admin)
+- `DELETE /quizzes/:id` — Soft delete quiz (Owner/Admin)
 
 ### Render PostgreSQL SSL
 

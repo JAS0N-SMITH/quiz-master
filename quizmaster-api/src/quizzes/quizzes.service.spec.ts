@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  ConflictException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
@@ -282,7 +282,7 @@ describe('QuizzesService', () => {
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('should throw BadRequestException if quiz has submissions', async () => {
+    it('should throw ConflictException if quiz has submissions', async () => {
       const quiz = {
         id: 'quiz-id',
         teacherId: 'teacher-id',
@@ -293,7 +293,7 @@ describe('QuizzesService', () => {
 
       await expect(
         service.update('quiz-id', { title: 'New Title' }, 'teacher-id'),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow(ConflictException);
     });
 
     it('should update questions when provided', async () => {

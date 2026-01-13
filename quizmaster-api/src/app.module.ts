@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { HealthModule } from './health/health.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { QuizzesModule } from './quizzes/quizzes.module';
 import { SubmissionsModule } from './submissions/submissions.module';
-import { HealthModule } from './health/health.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -65,10 +65,14 @@ import { HealthModule } from './health/health.module';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    ...(process.env.NODE_ENV === 'test'
+      ? []
+      : [
+          {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+          },
+        ]),
   ],
 })
 export class AppModule {}

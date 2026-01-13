@@ -1,25 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Put,
-  Param,
+  Controller,
+  DefaultValuePipe,
   Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Put,
   Query,
   UseGuards,
-  ParseIntPipe,
-  DefaultValuePipe,
-  ParseBoolPipe,
 } from '@nestjs/common';
-import { QuizzesService } from './quizzes.service';
-import { CreateQuizDto } from './dto/create-quiz.dto';
-import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { SubmissionsService } from '../submissions/submissions.service';
+import { CreateQuizDto } from './dto/create-quiz.dto';
+import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { QuizzesService } from './quizzes.service';
 
 @Controller('quizzes')
 @UseGuards(JwtAuthGuard)
@@ -73,6 +73,17 @@ export class QuizzesController {
   @UseGuards(RolesGuard)
   @Roles('TEACHER', 'ADMIN')
   update(
+    @Param('id') id: string,
+    @Body() updateQuizDto: UpdateQuizDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.quizzesService.update(id, updateQuizDto, user.id);
+  }
+
+  @Patch(':id')
+  @UseGuards(RolesGuard)
+  @Roles('TEACHER', 'ADMIN')
+  patch(
     @Param('id') id: string,
     @Body() updateQuizDto: UpdateQuizDto,
     @CurrentUser() user: any,
