@@ -7,10 +7,7 @@ export class PrismaService
   implements OnModuleInit, OnModuleDestroy
 {
   constructor() {
-    super({
-      // Read datasource from environment per prisma.config.ts guidance
-      datasourceUrl: process.env.DATABASE_URL,
-    });
+    super();
   }
   async onModuleInit() {
     await this.$connect();

@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "Root config for repo-wide tooling",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "prepare": "husky install",
     "lint:all": "./scripts/lint-all.sh",
