@@ -94,6 +94,50 @@ npm start
 | `npm start` | Start both API and UI in production mode |
 | `npm run lint:all` | Lint all projects |
 
+### Testing & E2E
+
+Run tests from the repo root:
+
+- UI tests:
+
+```bash
+npm run test:ui
+```
+
+- API unit tests:
+
+```bash
+npm run test:api
+```
+
+- API e2e tests (with DB ensure + migrations):
+
+```bash
+npm run test:api:e2e
+```
+
+- API e2e with open-handle detection:
+
+```bash
+npm run test:api:e2e:detect
+```
+
+### Local Database Orchestration
+
+The root script `db:ensure` will detect a Postgres on `localhost:5432` and skip Docker Compose startup when present. Otherwise, it will start the `postgres` service and wait until healthy.
+
+```bash
+# Ensure DB before tests or local runs
+npm run db:ensure
+
+# Manage Compose (optional)
+npm run compose:up
+npm run compose:ps
+npm run compose:down
+```
+
+Default local database name is `quizmaster`. Ensure `DATABASE_URL` points to this DB unless you override compose env.
+
 ## Troubleshooting
 
 ### Database Connection Issues
