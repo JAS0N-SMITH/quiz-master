@@ -70,6 +70,24 @@ $ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
+### Health Endpoints
+
+- `GET /health` — Dependency health check (includes database ping).
+- `GET /health/ready` — Readiness signal (lightweight OK payload).
+- `GET /health/live` — Liveness signal (minimal OK payload; no dependency checks).
+
+These endpoints are unauthenticated and intended for platform probes.
+
+### Render PostgreSQL SSL
+
+If deploying to Render with managed PostgreSQL, ensure your `DATABASE_URL` includes `?sslmode=require` to enforce encrypted connections, for example:
+
+```
+DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DB?sslmode=require
+```
+
+Prisma respects SSL settings provided via the connection string. No additional code changes are necessary.
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:

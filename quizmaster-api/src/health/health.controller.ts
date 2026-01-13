@@ -24,8 +24,24 @@ export class HealthController {
     ]);
   }
 
-  @Get('ready')
-  ready() {
+  // Simple liveness probe: no external dependencies
+  @Get('live')
+  live() {
     return { status: 'ok', timestamp: new Date().toISOString() };
+  }
+
+  @Get('ready')
+  @HealthCheck()
+  ready() {
+    return this.health.check([
+      async () => {
+        try {
+          await this.prisma.$queryRaw`SELECT 1`;
+          return { database: { status: 'up' } };
+        } catch (error) {
+          return { database: { status: 'down' } };
+        }
+      },
+    ]);
   }
 }
