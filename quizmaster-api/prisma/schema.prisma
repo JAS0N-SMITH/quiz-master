@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // Prisma v6 requires the connection URL in schema; keep SSL via `?sslmode=require` in DATABASE_URL.
-  url      = env("DATABASE_URL")
+  // Prisma 7 reads the connection URL from prisma.config.ts (datasource.url)
 }
 
 enum UserRole {
