@@ -119,6 +119,24 @@ quiz-master/
 | `npm start` | Start both projects in production mode |
 | `npm run lint:all` | Lint all projects |
 
+### Testing from Root
+
+The monorepo exposes convenient root-level test scripts:
+
+- `npm run test:ui` — runs frontend tests in `quizmaster-ui`.
+- `npm run test:api` — runs backend unit tests in `quizmaster-api`.
+- `npm run test:api:e2e` — ensures a local Postgres, applies migrations, then runs API e2e tests.
+- `npm run test:api:e2e:detect` — same as above but with Jest `--detectOpenHandles` to surface leaking handles.
+
+### Database Orchestration (Local)
+
+- `npm run db:ensure` — checks for a Postgres on `localhost:5432`; if none is found, it brings up the `postgres` service via Docker Compose and waits until healthy.
+- `npm run compose:up` / `npm run compose:ps` / `npm run compose:down` — manage the Docker Compose Postgres service from the repo root.
+
+Notes:
+- The ensure script will skip Compose startup when an external Postgres is detected on port 5432.
+- The Compose config uses database name `quizmaster` and includes a healthcheck for readiness.
+
 ### Database Commands
 
 ```bash
@@ -140,6 +158,7 @@ The backend exposes a RESTful API. All protected routes require a JWT token in t
 - `GET /quizzes/:id` - Get quiz details
 - `POST /quizzes` - Create quiz (Teacher/Admin)
 - `PUT /quizzes/:id` - Update quiz (Owner/Admin)
+- `PATCH /quizzes/:id` - Partial update (Owner/Admin)
 - `DELETE /quizzes/:id` - Soft delete quiz (Owner/Admin)
 
 **Submissions**
@@ -185,6 +204,14 @@ docker restart quizmaster-db
 cd quizmaster-api
 npx prisma generate        # Regenerate client
 npx prisma migrate reset   # Reset database (deletes data)
+
+**E2E tests return 429 Too Many Requests**
+
+In the test environment, throttling is disabled to prevent rate-limit interference. If you see 429s locally, verify `NODE_ENV` is `test` for e2e runs (the Jest e2e config ensures this via setup) and re-run with:
+
+```bash
+npm run test:api:e2e
+```
 ```
 
 **CORS errors**

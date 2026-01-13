@@ -44,7 +44,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
             expiresIn: expiration,
           },
         } as JwtModuleOptions;
-      };,
+      },
       inject: [ConfigService],
     }),
   ],

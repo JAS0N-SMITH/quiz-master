@@ -3,7 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "description": "Root config for repo-wide tooling",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
+      "compose:up": "docker compose up -d postgres",
+      "compose:down": "docker compose down -v",
+      "compose:ps": "docker compose ps",
     "prepare": "husky install",
     "lint:all": "./scripts/lint-all.sh",
     "lint:root": "eslint . --fix",
@@ -22,7 +28,8 @@
     "test:api": "cd quizmaster-api && npm test",
     "test:api:watch": "cd quizmaster-api && npm run test:watch",
     "test:api:cov": "cd quizmaster-api && npm run test:cov",
-    "test:api:e2e": "cd quizmaster-api && npm run test:e2e",
+    "test:api:e2e": "npm run db:ensure && cd quizmaster-api && npx prisma migrate deploy && npm run test:e2e",
+    "test:api:e2e:detect": "npm run db:ensure && cd quizmaster-api && npx jest --config ./test/jest-e2e.json --detectOpenHandles",
     "test:ui": "cd quizmaster-ui && npm test",
     "test:ui:watch": "cd quizmaster-ui && npm run test:watch",
     "test:ui:coverage": "cd quizmaster-ui && npm run test:coverage",
@@ -30,7 +37,8 @@
     "test:all": "npm run test:api && npm run test:ui && npm run test:api:e2e",
     "test:watch": "concurrently --names \"API,UI\" --prefix-colors \"blue,green\" \"npm run test:api:watch\" \"npm run test:ui:watch\"",
     "test:coverage": "npm run test:api:cov && npm run test:ui:coverage",
-    "test": "npm run test:unit"
+    "test": "npm run test:unit",
+    "db:ensure": "bash ./scripts/db-ensure.sh"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

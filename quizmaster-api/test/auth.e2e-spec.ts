@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
@@ -151,6 +151,8 @@ describe('Auth (e2e)', () => {
   });
 
   afterAll(async () => {
+    // Explicitly disconnect Prisma before closing the app to prevent open handles
+    await prisma.$disconnect();
     await app.close();
   });
 });

@@ -19,22 +19,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
-    let error = 'Internal Server Error';
+    let error: string | undefined = undefined;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
       if (typeof exceptionResponse === 'object') {
-        message = (exceptionResponse as any).message || exception.message;
-        error = (exceptionResponse as any).error || 'Error';
+        // Preserve full response object in message for richer error details
+        message = exceptionResponse as any;
+        error = (exceptionResponse as any).error;
       } else {
         message = exceptionResponse;
       }
     } else if (exception instanceof Error) {
-      message = exception.message;
-
-      // Log unexpected errors
+      // Keep generic message for unexpected errors, but log details
       this.logger.error(
         `Unexpected error: ${exception.message}`,
         exception.stack,
@@ -46,12 +45,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = 'An unexpected error occurred';
     }
 
-    response.status(status).json({
+    const body: Record<string, unknown> = {
       statusCode: status,
       message,
-      error,
       timestamp: new Date().toISOString(),
       path: request.url,
-    });
+    };
+    if (error) {
+      body.error = error;
+    }
+    response.status(status).json(body);
   }
 }

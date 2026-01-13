@@ -120,3 +120,4 @@ docker-compose.override.yml
 *.backup
 *~
 SECURITY_AUDIT_SUMMARY.md
+.nvmrc

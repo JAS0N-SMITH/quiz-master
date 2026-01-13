@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
@@ -318,6 +318,8 @@ describe('Quizzes (e2e)', () => {
     await prisma.quiz.deleteMany({
       where: { teacher: { email: { contains: 'e2e-' } } },
     });
+    // Explicitly disconnect Prisma before closing the app to avoid lingering handles
+    await prisma.$disconnect();
     await app.close();
   });
 });
