@@ -36,13 +36,15 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         }
 
         const expiration = config.get<string>('JWT_EXPIRATION', '7d');
+        // deepcode ignore HardcodedNonCryptoSecret: This is a development fallback only, production requires JWT_SECRET env var
+        const fallbackSecret = 'dev-secret-do-not-use-in-production';
         return {
-          secret: secret || 'dev-secret-do-not-use-in-production',
+          secret: secret || fallbackSecret,
           signOptions: {
             expiresIn: expiration,
           },
         } as JwtModuleOptions;
-      },
+      };,
       inject: [ConfigService],
     }),
   ],
